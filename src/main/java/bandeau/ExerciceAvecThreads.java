@@ -8,9 +8,12 @@ public class ExerciceAvecThreads {
     }
 
     public void exemple() {
-        Scenario s = makeScenario();
+        // Créer des scénarios différents pour chaque bandeau
+        Scenario scenario1 = makeScenario1();
+        Scenario scenario2 = makeScenario2();
+        Scenario scenario3 = makeScenario3();
 
-        // On crée des bandeaux thread-safe
+        // Créer des bandeaux thread-safe
         var b1 = new ThreadSafeBandeau();
         var b2 = new ThreadSafeBandeau();
         var b3 = new ThreadSafeBandeau();
@@ -18,9 +21,9 @@ public class ExerciceAvecThreads {
         System.out.println("CTRL-C pour terminer le programme");
 
         // Exécuter les scénarios en parallèle sur différents bandeaux
-        Thread t1 = new Thread(() -> b1.playScenario(s));
-        Thread t2 = new Thread(() -> b2.playScenario(s));
-        Thread t3 = new Thread(() -> b3.playScenario(s));
+        Thread t1 = new Thread(() -> b1.playScenario(scenario1));
+        Thread t2 = new Thread(() -> b2.playScenario(scenario2));
+        Thread t3 = new Thread(() -> b3.playScenario(scenario3));
 
         t1.start();
         t2.start();
@@ -35,14 +38,28 @@ public class ExerciceAvecThreads {
             Thread.currentThread().interrupt();
         }
 
-        // Rejouer le scénario sur b1
-        b1.playScenario(s);
+        // Rejouer un scénario sur b1 (par exemple, scenario1)
+        b1.playScenario(scenario1);
     }
 
-    private Scenario makeScenario() {
+    private Scenario makeScenario1() {
         Scenario s = new Scenario();
-        s.addEffect(new RandomEffect("Le jeu du pendu", 700), 1);
-        s.addEffect(new Rotate("2 tours à droite", 180, 4000, true), 2);
+        s.addEffect(new RandomEffect("Effet aléatoire sur b1", 700), 1);
+        s.addEffect(new Rotate("Rotation à droite sur b1", 180, 4000, true), 2);
+        return s;
+    }
+
+    private Scenario makeScenario2() {
+        Scenario s = new Scenario();
+        s.addEffect(new TeleType("Texte caractère par caractère sur b2", 100), 1);
+        s.addEffect(new Blink("Clignotement sur b2", 200), 5);
+        return s;
+    }
+
+    private Scenario makeScenario3() {
+        Scenario s = new Scenario();
+        s.addEffect(new Zoom("Zoom sur b3", 50), 1);
+        s.addEffect(new Rainbow("Arc-en-ciel sur b3", 30), 1);
         return s;
     }
 }
